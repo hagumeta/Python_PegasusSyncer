@@ -1,0 +1,13 @@
+entity paths {
+id: INTEGER
+path: TEXT
+}
+
+entity plays {
+id: INTEGER
+path_id: INTEGER
+start_time: INTEGER
+duration: INTEGER
+}
+
+paths - plays

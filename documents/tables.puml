@@ -1,28 +1,30 @@
 
 entity cfg_games {
 id: INTEGER
-name: TEXT // 人間用参照用
-label: TEXT // 人間用参照用
+name: TEXT // 実行ファイルから抽出する, 識別ID
+label: TEXT // 人間メモ
 }
 
 entity cfg_devices {
 id: INTEGER
 name: TEXT // 人間用参照用
 db_path: TEXT // プログラム参照用
+last_integrated: DATETIME
 }
 
 entity paths {
   id: INTEGER
   device_id: TEXT
   game_id: INTEGER //手で割り当て
-
   original_path_id: TEXT// plays出力用(device_id毎にunique)
   path: TEXT       //人間参照用(device_id毎にunique)
+  file_name: TEXT  //人間参照用
 }
 
 
 entity histories {
 id: INTEGER
+device_id: INTEGER
 path_id: INTEGER -> paths.original_path_id <-> plays.path_id
 played_time (unixdate): INTEGER <-> plays.start_time
 played_duration (muliseconds): INTEGER <-> plays.duration

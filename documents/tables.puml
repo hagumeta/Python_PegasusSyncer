@@ -25,7 +25,7 @@ entity paths {
 entity histories {
 id: INTEGER
 device_id: INTEGER
-path_id: INTEGER -> paths.original_path_id <-> plays.path_id
+path_id: INTEGER
 played_time (unixdate): INTEGER <-> plays.start_time
 played_duration (muliseconds): INTEGER <-> plays.duration
 }

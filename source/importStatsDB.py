@@ -59,11 +59,11 @@ def main ():
     ).next()['last_played'] or 0
     # pegasus_frontend出力DBのログから，未登録のログを統合DB`histories`へコピー
     for play in original_db['plays'].find(start_time={'>': _timeLastPlayed}):
-      if(play.get('integrated') == 1): continue
       _path = tb_integration_paths.find_one(device_id=device['id'], original_path_id=play['path_id'])
       _pathId = (_path['id'] or -1) if _path else -1
       if _pathId > 0:
-        registerHistory(deviceId=device['id'], pathId=_pathId, playedTime=play['start_time'], playedDuration=play['duration'])
+        registerHistory(deviceId=device['id'], pathId=_pathId, \
+          playedTime=play['start_time'], playedDuration=play['duration'])
     
     original_db.close()
 
@@ -91,5 +91,5 @@ def registerHistory(deviceId: str, pathId: str, playedTime: str, playedDuration:
 
 main()
 db_integration.close()
-print ("COMPLETE!")
+print ("Import And Integrate Pegasus-DB COMPLETE!")
 exit(0)

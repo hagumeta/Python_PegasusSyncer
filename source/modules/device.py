@@ -11,10 +11,10 @@ class Device:
     self.path = base_path
   
   def get_db_path (self): 
-    return f"{self.path}\stats.db"
+    return os.path.join(self.path, "stats.db")
 
   def get_backup_path (self): 
-    return f"{self.path}\\backup"
+    return os.path.join(self.path, "backup")
 
   def is_db_exists (self): 
     return os.path.exists(self.get_db_path())
@@ -32,5 +32,5 @@ class Device:
 
   def create_db_backup (self): 
     time=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
-    backup_path = f"{self.get_backup_path()}\stats_{time}.db"
-    shutil.copy(self.get_db_path(), backup_path)
+    backup_path = os.path.join(self.get_backup_path(), f"stats_{time}.db")
+    shutil.copy2(self.get_db_path(), backup_path)

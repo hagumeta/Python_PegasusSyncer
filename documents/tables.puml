@@ -26,6 +26,7 @@ entity histories {
 id: INTEGER
 device_id: INTEGER
 path_id: INTEGER
+game_id: INTEGER
 played_time (unixdate): INTEGER <-> plays.start_time
 played_duration (muliseconds): INTEGER <-> plays.duration
 }
@@ -34,3 +35,4 @@ cfg_games -{ paths
 cfg_devices -{ paths 
 
 paths -{ histories
+paths -{ cfg_games

@@ -46,6 +46,7 @@ sql4 = """
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         device_id INTEGER,
         path_id INTEGER,
+        game_id INTEGER,
         played_time INTEGER,
         played_duration INTEGER
     );

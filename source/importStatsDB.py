@@ -61,8 +61,9 @@ def main ():
     for play in original_db['plays'].find(start_time={'>': _timeLastPlayed}):
       _path = tb_integration_paths.find_one(device_id=device['id'], original_path_id=play['path_id'])
       _pathId = (_path['id'] or -1) if _path else -1
+      _gameId = _path['game_id']
       if _pathId > 0:
-        registerHistory(deviceId=device['id'], pathId=_pathId, \
+        registerHistory(deviceId=device['id'], pathId=_pathId, gameId=_gameId, \
           playedTime=play['start_time'], playedDuration=play['duration'])
     
     original_db.close()
@@ -84,12 +85,11 @@ def registerPath(deviceId: str, gameId: str, gameName: str, originalPathId: str,
   tb_integration_paths.insert(_pathData)
 
 # historiesテーブルに新規レコードを挿入する
-def registerHistory(deviceId: str, pathId: str, playedTime: str, playedDuration: str):
-  _historyData = dict(device_id=deviceId, path_id=pathId, played_time=playedTime, played_duration=playedDuration)
+def registerHistory(deviceId: str, pathId: str, gameId: str, playedTime: str, playedDuration: str):
+  _historyData = dict(device_id=deviceId, path_id=pathId, game_id=gameId, played_time=playedTime, played_duration=playedDuration)
   tb_integration_histories.insert(_historyData)
 
 
 main()
 db_integration.close()
 print ("Import And Integrate Pegasus-DB COMPLETE!")
-exit(0)

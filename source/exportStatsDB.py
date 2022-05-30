@@ -27,9 +27,9 @@ def main ():
     deviceCntl = Device(device['db_path'])
 
     # pegasus_frontend出力DBの更新が10分以内の場合，更新しない
-#    if deviceCntl.get_db_updated_time() > (nowTime + timedelta(minutes=-10)):
-#      print (f"device DB is using now. cant update. >> SKIP")
-#      continue
+    if deviceCntl.get_db_updated_time() > (nowTime + timedelta(minutes=-10)):
+      print (f"device DB is using now. cant update. >> SKIP")
+      continue
 
     # バックアップを作成する
     deviceCntl.create_db_backup()
@@ -45,18 +45,24 @@ def main ():
     # DBのデータ削除
     original_db['plays'].delete()
 
-    # 統合DBから，デバイス内で定義されたゲーム履歴を取得し，インサートする
+    # 統合DBから，デバイスに登録済のゲーム履歴を取得し，インサートする
     insertPlays = []
-    for path in tb_integration_paths.find(device_id=device['id']):
+    games = map(lambda path: {\
+        "game_id": path['game_id'], \
+        "original_path_id": path['original_path_id'],\
+      }, \
+      tb_integration_paths.find(device_id=device['id']) \
+    )
+    for game in games:
       insertPlays.extend(\
         list(
           map(
             lambda history:  {\
                 "start_time": history['played_time'], \
                 "duration": history['played_duration'], \
-                "path_id": history['original_path_id']\
+                "path_id": game['original_path_id']\
               }, \
-            tb_integration_histories.find(path_id=path['id'])
+            tb_integration_histories.find(game_id=game['game_id'])
           )
         )
       )
@@ -72,4 +78,3 @@ def main ():
 main()
 db_integration.close()
 print ("Export Pegasus-DB COMPLETE!")
-exit(0)

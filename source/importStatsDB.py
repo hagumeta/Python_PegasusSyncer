@@ -54,9 +54,9 @@ def main ():
 
 
     # 統合済のデータの内，最新レコードを取得
-    _timeLastPlayed=db_integration.query(
+    _timeLastPlayed=list(db_integration.query(
       f"SELECT max(`played_time`) as last_played FROM histories WHERE device_id = {device['id']}"
-    ).next()['last_played'] or 0
+    ))[0]['last_played'] or 0
     # pegasus_frontend出力DBのログから，未登録のログを統合DB`histories`へコピー
     for play in original_db['plays'].find(start_time={'>': _timeLastPlayed}):
       _path = tb_integration_paths.find_one(device_id=device['id'], original_path_id=play['path_id'])
